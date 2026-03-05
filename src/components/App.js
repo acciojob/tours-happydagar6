@@ -9,16 +9,13 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [toursList, setToursList] = useState([]);
 
-  // Tour delete karne ka function (Same as before)
   const handleRemoveTour = (id) => {
     const updatedTours = toursList.filter((tour) => tour.id !== id);
     setToursList(updatedTours);
   };
 
-  // THE FIX: async/await removed and promise chaining added
   const fetchToursData = () => {
     setIsLoading(true);
-    
     fetch(API_URL)
       .then((response) => response.json())
       .then((data) => {
@@ -36,8 +33,9 @@ const App = () => {
   }, []);
 
   if (isLoading) {
+  
     return (
-      <main>
+      <main id="main">
         <Loading />
       </main>
     );
@@ -45,7 +43,7 @@ const App = () => {
 
   if (toursList.length === 0) {
     return (
-      <main>
+      <main id="main">
         <div className="title">
           <h2>No tours left</h2>
           <button className="refresh-btn" onClick={() => fetchToursData()}>
@@ -57,7 +55,7 @@ const App = () => {
   }
 
   return (
-    <main>
+    <main id="main">
       <Tours toursData={toursList} removeTour={handleRemoveTour} />
     </main>
   );
