@@ -9,32 +9,32 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [toursList, setToursList] = useState([]);
 
-  
+  // Tour delete karne ka function (Same as before)
   const handleRemoveTour = (id) => {
     const updatedTours = toursList.filter((tour) => tour.id !== id);
     setToursList(updatedTours);
   };
 
-  
-  const fetchToursData = async () => {
+  // THE FIX: async/await removed and promise chaining added
+  const fetchToursData = () => {
     setIsLoading(true);
-    try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      setIsLoading(false);
-      setToursList(data);
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
+    
+    fetch(API_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        setIsLoading(false);
+        setToursList(data);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(error);
+      });
   };
-
 
   useEffect(() => {
     fetchToursData();
   }, []);
 
-  
   if (isLoading) {
     return (
       <main>
@@ -55,6 +55,7 @@ const App = () => {
       </main>
     );
   }
+
   return (
     <main>
       <Tours toursData={toursList} removeTour={handleRemoveTour} />
